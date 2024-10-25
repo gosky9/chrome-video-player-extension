@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>  
+  <meta charset="UTF-8">
+  <title>Chrome 收藏夹视频播放器</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <h1>Chrome 收藏夹视频播放器</h1>
+  <select id="folderSelect">
+    <option value="">选择收藏夹</option>
+  </select>
+  <button id="playButton">开始播放</button>
+  <button id="stopButton">停止播放</button>
+  <select id="playMode">
+    <option value="sequential">顺序播放</option>
+    <option value="random">随机播放</option>
+  </select>
+  <div id="progressBar">
+    <div id="progress"></div>
+  </div>
+  <!-- 新增视频列表 -->
+  <ul id="videoList"></ul>
+  <script src="popup.js"></script>
+</body>
+</html>
