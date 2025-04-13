@@ -6,7 +6,6 @@ let currentTabId = null;
 let currentTime = 0;
 let duration = 0;
 let manuallyClosedTab = false;
-let autoplayEnabled = true;
 let playbackSpeed = 1.0;
 let currentVideoId = null;
 let videoPositions = {}; // 存储视频播放位置
@@ -23,8 +22,6 @@ chrome.storage.local.get(['videoPositions'], (result) => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'startPlaying') {
     playMode = request.playMode;
-    autoplayEnabled = request.autoplay !== undefined ? request.autoplay : true;
-    playbackSpeed = request.playbackSpeed || 1.0;
     
     chrome.bookmarks.getChildren(request.folderId, (bookmarks) => {
       currentPlaylist = bookmarks.filter(bookmark => 
@@ -45,8 +42,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   } else if (request.action === 'startPlayingFrom') {
     playMode = request.playMode;
-    autoplayEnabled = request.autoplay !== undefined ? request.autoplay : true;
-    playbackSpeed = request.playbackSpeed || 1.0;
     
     chrome.bookmarks.getChildren(request.folderId, (bookmarks) => {
       currentPlaylist = bookmarks.filter(bookmark => 
@@ -93,10 +88,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     }
   } else if (request.action === 'videoEnded') {
-    // 根据自动播放设置决定是否播放下一个
-    if (autoplayEnabled) {
-      playNext();
-    }
+    // 视频结束后总是自动播放下一个
+    playNext();
   } else if (request.action === 'getCurrentVideo') {
     sendResponse({
       currentVideoId: currentVideoId,

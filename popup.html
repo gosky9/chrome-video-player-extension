@@ -1,80 +1,72 @@
 <!DOCTYPE html>
-<html>
-<head>  
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Chrome 收藏夹视频播放器</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrome视频播放器</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <!-- 顶部选择区域 -->
-    <div class="top-row">
-      <select id="folderSelect" class="select-styled">
-        <option value="">选择收藏夹</option>
-      </select>
-      
-      <select id="playMode" class="select-styled">
-        <option value="random">随机播放</option>
-        <option value="sequential">顺序播放</option>
-      </select>
-    </div>
-    
-    <!-- 所有控制元素在一行 -->
-    <div class="control-strip">
+    <!-- 顶部控制栏 -->
+    <div class="control-bar">
+      <!-- 播放控制区 -->
       <div class="player-controls">
-        <button id="prevButton" class="control-btn" title="上一首">
-          <i class="bi bi-skip-backward-fill"></i>
-        </button>
-        <button id="playPauseButton" class="control-btn" title="播放/暂停">
-          <i class="bi bi-play-fill" id="playIcon"></i>
-        </button>
-        <button id="nextButton" class="control-btn" title="下一首">
-          <i class="bi bi-skip-forward-fill"></i>
-        </button>
-        <button id="stopButton" class="control-btn stop" title="停止播放">
-          <i class="bi bi-stop-fill"></i>
-        </button>
+        <button class="control-btn stop" title="停止"><i class="fas fa-stop"></i></button>
+        <button class="control-btn" title="上一个"><i class="fas fa-step-backward"></i></button>
+        <button class="control-btn" title="播放/暂停"><i class="fas fa-play"></i></button>
+        <button class="control-btn" title="下一个"><i class="fas fa-step-forward"></i></button>
       </div>
-      
-      <button id="playButton" class="action-btn">开始播放</button>
-      <button id="fullscreenButton" class="action-btn fullscreen-btn">全屏播放器</button>
-      
-      <select id="playbackSpeed" class="select-styled compact">
-        <option value="0.5">0.5x</option>
-        <option value="0.75">0.75x</option>
-        <option value="1" selected>1.0x</option>
-        <option value="1.25">1.25x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2">2.0x</option>
+
+      <!-- 收藏夹选择 -->
+      <select class="select-mini" title="收藏夹选择">
+        <option value="all">全部收藏</option>
+        <option value="fav1">收藏夹1</option>
+        <option value="recent">最近观看</option>
       </select>
+        
+      <!-- 时间显示 -->
+      <div class="time-compact">
+        <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+      </div>
+
+      <!-- 随机/顺序播放按钮 -->
+      <button class="mode-toggle" title="切换随机/顺序播放"><i class="fas fa-random"></i></button>
+
+      <!-- 功能控制区 -->
+      <div class="function-controls">
+        <!-- 播放速度 -->
+        <select class="select-mini" title="播放速度">
+          <option value="0.5">0.5x</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1.0x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2.0x</option>
+        </select>
+        
+        <!-- 全屏按钮 -->
+        <button class="control-btn fullscreen-btn" title="全屏"><i class="fas fa-expand"></i></button>
+      </div>
     </div>
-    
+
     <!-- 进度条 -->
     <div class="progress-container">
       <div id="progressBar">
         <div id="progress"></div>
       </div>
-      <div class="time-display">
-        <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
-      </div>
     </div>
-    
-    <!-- 播放列表 -->
+
+    <!-- 播放列表区域 -->
     <div class="playlist-section">
       <div class="playlist-header">播放列表</div>
-      <ul id="videoList" class="video-list"></ul>
-    </div>
-    
-    <!-- 设置 -->
-    <div class="settings">
-      <label class="checkbox-container">
-        <input type="checkbox" id="rememberPosition" checked>
-        记住播放位置
-      </label>
+      <ul class="video-list">
+        <!-- 视频列表将由JavaScript动态生成 -->
+      </ul>
     </div>
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>

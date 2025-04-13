@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const currentTimeEl = document.getElementById('currentTime');
   const totalTimeEl = document.getElementById('totalTime');
   const playbackSpeed = document.querySelector('.select-mini[title="播放速度"]');
-  const autoplayCheckbox = document.getElementById('autoplay');
   const fullscreenButton = document.querySelector('.fullscreen-btn');
 
   let defaultFolderId = null;
@@ -48,17 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
   chrome.storage.sync.get([
     'lastSelectedFolder', 
     'playMode', 
-    'autoplay', 
     'playbackSpeed'
   ], function(result) {
     // 设置默认播放模式
     isRandomMode = result.playMode !== 'sequential';
     updatePlayModeIcon(isRandomMode);
-
-    // 设置是否自动播放下一个视频
-    if (result.autoplay !== undefined) {
-      autoplayCheckbox.checked = result.autoplay;
-    }
 
     // 设置播放速度
     if (result.playbackSpeed) {
@@ -113,11 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.storage.sync.set({playMode: isRandomMode ? 'random' : 'sequential'});
   });
 
-  // 自动播放选项变更时保存
-  autoplayCheckbox.addEventListener('change', function() {
-    chrome.storage.sync.set({autoplay: autoplayCheckbox.checked});
-  });
-
   // 播放速度变更时保存
   playbackSpeed.addEventListener('change', function() {
     chrome.storage.sync.set({playbackSpeed: playbackSpeed.value});
@@ -157,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 folderId: folderId,
                 bookmarkId: bookmark.id,
                 playMode: isRandomMode ? 'random' : 'sequential',
-                autoplay: autoplayCheckbox.checked,
                 playbackSpeed: parseFloat(playbackSpeed.value)
               });
             });
@@ -199,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
           folderId: folderSelect.value,
           bookmarkId: firstVideo.dataset.id,
           playMode: isRandomMode ? 'random' : 'sequential',
-          autoplay: autoplayCheckbox.checked,
           playbackSpeed: parseFloat(playbackSpeed.value)
         });
       } else {
