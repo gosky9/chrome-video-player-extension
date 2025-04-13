@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const totalTimeEl = document.getElementById('totalTime');
   const playbackSpeed = document.querySelector('.select-mini[title="播放速度"]');
   const fullscreenButton = document.querySelector('.fullscreen-btn');
+  const playerButton = document.querySelector('.player-btn');
 
   let defaultFolderId = null;
   let currentVideoId = null;
@@ -282,5 +283,11 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('请先播放一个视频再使用全屏功能');
       }
     });
+  });
+
+  // 播放器按钮点击事件
+  playerButton.addEventListener('click', function() {
+    // 打开独立播放器页面
+    chrome.tabs.create({url: 'player.html'});
   });
 });

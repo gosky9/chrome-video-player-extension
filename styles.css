@@ -133,6 +133,17 @@ body {
   margin-left: 0;
 }
 
+/* 播放器按钮 */
+.player-btn {
+  margin-left: 4px;
+  color: #555555;
+}
+
+.player-btn:hover {
+  color: #000000;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 /* 进度条样式 */
 .progress-container {
   width: 100%;
