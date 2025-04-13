@@ -273,12 +273,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 当前有视频播放，使用当前视频URL
         chrome.runtime.sendMessage({action: 'getCurrentVideoURL'}, function(urlResponse) {
           if (urlResponse && urlResponse.url) {
-            chrome.tabs.create({url: urlResponse.url}, function(tab) {
-              // 等待标签页加载完成后发送全屏命令
-              setTimeout(function() {
-                chrome.tabs.sendMessage(tab.id, {action: 'toggleFullscreen'});
-              }, 2000);
-            });
+            // 直接在新标签中打开视频，用户可以在视频网站中点击全屏按钮
+            chrome.tabs.create({url: urlResponse.url});
           }
         });
       } else {
