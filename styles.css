@@ -103,19 +103,18 @@ h2 {
 /* 播放控制器样式 */
 .player-controls {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 8px 0;
+  gap: 5px;
+  margin: 0;
 }
 
 .control-btn {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
   border-radius: 50%;
   border: none;
   background-color: var(--primary-color);
   color: white;
-  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,9 +136,9 @@ h2 {
 }
 
 #playPauseButton {
-  width: 46px;
-  height: 46px;
-  font-size: 20px;
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
 }
 
 /* 播放控制 */
@@ -152,8 +151,7 @@ h2 {
 
 /* 进度条 */
 .progress-container {
-  margin: 10px 0;
-  flex-shrink: 0; /* 防止进度条区域被压缩 */
+  margin: 8px 0;
 }
 
 #progressBar {
@@ -262,4 +260,59 @@ h2 {
 
 .fullscreen-btn:hover {
   background-color: #e5a800;
+}
+
+/* 控制行排列 */
+.control-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* 按钮组样式 */
+.buttons-group {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.small-btn {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.small-btn:hover {
+  background-color: #3367d6;
+}
+
+.small-btn.fullscreen-btn {
+  background-color: var(--accent-color);
+}
+
+.small-btn.fullscreen-btn:hover {
+  background-color: #e5a800;
+}
+
+/* 迷你选择框 */
+.select-styled.mini {
+  flex: none;
+  width: auto;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+/* 优化视频列表标题 */
+.video-list-container h2 {
+  font-size: 16px;
+  margin: 8px 0;
+  padding-left: 8px;
 }

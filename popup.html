@@ -9,10 +9,6 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>Chrome 收藏夹视频播放器</h1>
-    </div>
-    
     <div class="controls">
       <div class="control-group">
         <select id="folderSelect" class="select-styled">
@@ -25,39 +21,34 @@
         </select>
       </div>
       
-      <div class="player-controls">
-        <button id="prevButton" class="control-btn" title="上一首">
-          <i class="bi bi-skip-backward-fill"></i>
-        </button>
-        <button id="playPauseButton" class="control-btn" title="播放/暂停">
-          <i class="bi bi-play-fill" id="playIcon"></i>
-        </button>
-        <button id="nextButton" class="control-btn" title="下一首">
-          <i class="bi bi-skip-forward-fill"></i>
-        </button>
-        <button id="stopButton" class="control-btn stop" title="停止播放">
-          <i class="bi bi-stop-fill"></i>
-        </button>
-      </div>
-      
-      <div class="control-group">
-        <button id="playButton" class="btn">开始播放列表</button>
-      </div>
-      
-      <div class="control-group">
-        <button id="fullscreenButton" class="btn fullscreen-btn">打开全屏播放器</button>
-      </div>
-      
-      <div class="playback-controls">
-        <label>播放速度:</label>
-        <select id="playbackSpeed" class="select-styled small">
-          <option value="0.5">0.5x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1" selected>1.0x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2.0x</option>
-        </select>
+      <div class="control-row">
+        <div class="player-controls">
+          <button id="prevButton" class="control-btn" title="上一首">
+            <i class="bi bi-skip-backward-fill"></i>
+          </button>
+          <button id="playPauseButton" class="control-btn" title="播放/暂停">
+            <i class="bi bi-play-fill" id="playIcon"></i>
+          </button>
+          <button id="nextButton" class="control-btn" title="下一首">
+            <i class="bi bi-skip-forward-fill"></i>
+          </button>
+          <button id="stopButton" class="control-btn stop" title="停止播放">
+            <i class="bi bi-stop-fill"></i>
+          </button>
+        </div>
+        
+        <div class="buttons-group">
+          <button id="playButton" class="small-btn">开始播放</button>
+          <button id="fullscreenButton" class="small-btn fullscreen-btn">全屏播放器</button>
+          <select id="playbackSpeed" class="select-styled mini">
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1.0x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2.0x</option>
+          </select>
+        </div>
       </div>
     </div>
     
