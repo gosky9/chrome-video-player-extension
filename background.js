@@ -6,7 +6,7 @@ let currentTabId = null;
 let currentTime = 0;
 let duration = 0;
 let manuallyClosedTab = false;
-let rememberPositions = true;
+let autoplayEnabled = true;
 let playbackSpeed = 1.0;
 let currentVideoId = null;
 let videoPositions = {}; // 存储视频播放位置
@@ -23,7 +23,7 @@ chrome.storage.local.get(['videoPositions'], (result) => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'startPlaying') {
     playMode = request.playMode;
-    rememberPositions = request.rememberPosition;
+    autoplayEnabled = request.autoplay !== undefined ? request.autoplay : true;
     playbackSpeed = request.playbackSpeed || 1.0;
     
     chrome.bookmarks.getChildren(request.folderId, (bookmarks) => {
@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   } else if (request.action === 'startPlayingFrom') {
     playMode = request.playMode;
-    rememberPositions = request.rememberPosition;
+    autoplayEnabled = request.autoplay !== undefined ? request.autoplay : true;
     playbackSpeed = request.playbackSpeed || 1.0;
     
     chrome.bookmarks.getChildren(request.folderId, (bookmarks) => {
@@ -85,7 +85,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     duration = request.duration;
     
     // 保存视频播放位置
-    if (rememberPositions && currentVideoId) {
+    if (currentVideoId) {
       videoPositions[currentVideoId] = currentTime;
       // 降低保存频率，防止频繁写入存储
       if (Math.random() < 0.1) { // 10%的概率保存
@@ -93,7 +93,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     }
   } else if (request.action === 'videoEnded') {
-    playNext();
+    // 根据自动播放设置决定是否播放下一个
+    if (autoplayEnabled) {
+      playNext();
+    }
   } else if (request.action === 'getCurrentVideo') {
     sendResponse({
       currentVideoId: currentVideoId,
@@ -257,7 +260,7 @@ function configureNewTab(tabId, url) {
         });
         
         // 恢复播放位置
-        if (rememberPositions && currentVideoId && videoPositions[currentVideoId]) {
+        if (currentVideoId && videoPositions[currentVideoId]) {
           const savedPosition = videoPositions[currentVideoId];
           chrome.tabs.sendMessage(tabId, {
             action: 'seekTo',
@@ -332,7 +335,7 @@ function stopPlaying() {
 
 // 定期保存视频播放位置
 setInterval(() => {
-  if (rememberPositions && Object.keys(videoPositions).length > 0) {
+  if (Object.keys(videoPositions).length > 0) {
     chrome.storage.local.set({videoPositions: videoPositions});
   }
 }, 30000); // 每30秒保存一次

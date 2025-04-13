@@ -1,53 +1,63 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const folderSelect = document.getElementById('folderSelect');
-  const playButton = document.getElementById('playButton');
-  const stopButton = document.getElementById('stopButton');
-  const playMode = document.getElementById('playMode');
+  const folderSelect = document.querySelector('.select-mini[title="收藏夹选择"]');
+  const stopButton = document.querySelector('.control-btn.stop');
+  const prevButton = document.querySelector('.control-btn[title="上一个"]');
+  const playPauseButton = document.querySelector('.control-btn[title="播放/暂停"]');
+  const nextButton = document.querySelector('.control-btn[title="下一个"]');
+  const playIcon = playPauseButton.querySelector('i');
+  const playModeToggle = document.querySelector('.mode-toggle');
   const progressBar = document.getElementById('progressBar');
   const progress = document.getElementById('progress');
-  const videoList = document.getElementById('videoList');
+  const videoList = document.querySelector('.video-list');
   const currentTimeEl = document.getElementById('currentTime');
   const totalTimeEl = document.getElementById('totalTime');
-  const playbackSpeed = document.getElementById('playbackSpeed');
-  const rememberPosition = document.getElementById('rememberPosition');
-  const prevButton = document.getElementById('prevButton');
-  const nextButton = document.getElementById('nextButton');
-  const playPauseButton = document.getElementById('playPauseButton');
-  const playIcon = document.getElementById('playIcon');
-  const fullscreenButton = document.getElementById('fullscreenButton');
+  const playbackSpeed = document.querySelector('.select-mini[title="播放速度"]');
+  const autoplayCheckbox = document.getElementById('autoplay');
+  const fullscreenButton = document.querySelector('.fullscreen-btn');
 
   let defaultFolderId = null;
   let currentVideoId = null;
   let isPlaying = false;
+  let isRandomMode = true; // 默认随机播放模式
 
   // 更新播放/暂停图标
   function updatePlayPauseIcon(playing) {
     if (playing) {
-      playIcon.classList.remove('bi-play-fill');
-      playIcon.classList.add('bi-pause-fill');
+      playIcon.classList.remove('fa-play');
+      playIcon.classList.add('fa-pause');
     } else {
-      playIcon.classList.remove('bi-pause-fill');
-      playIcon.classList.add('bi-play-fill');
+      playIcon.classList.remove('fa-pause');
+      playIcon.classList.add('fa-play');
+    }
+  }
+
+  // 更新播放模式图标
+  function updatePlayModeIcon(isRandom) {
+    if (isRandom) {
+      playModeToggle.querySelector('i').classList.remove('fa-list');
+      playModeToggle.querySelector('i').classList.add('fa-random');
+      playModeToggle.title = "当前为随机播放，点击切换到顺序播放";
+    } else {
+      playModeToggle.querySelector('i').classList.remove('fa-random');
+      playModeToggle.querySelector('i').classList.add('fa-list');
+      playModeToggle.title = "当前为顺序播放，点击切换到随机播放";
     }
   }
 
   // 加载用户设置
   chrome.storage.sync.get([
     'lastSelectedFolder', 
-    'lastPlayMode', 
-    'rememberPosition', 
+    'playMode', 
+    'autoplay', 
     'playbackSpeed'
   ], function(result) {
-    // 设置默认播放模式为随机
-    if (result.lastPlayMode) {
-      playMode.value = result.lastPlayMode;
-    } else {
-      playMode.value = 'random';
-    }
+    // 设置默认播放模式
+    isRandomMode = result.playMode !== 'sequential';
+    updatePlayModeIcon(isRandomMode);
 
-    // 设置是否记住播放位置
-    if (result.rememberPosition !== undefined) {
-      rememberPosition.checked = result.rememberPosition;
+    // 设置是否自动播放下一个视频
+    if (result.autoplay !== undefined) {
+      autoplayCheckbox.checked = result.autoplay;
     }
 
     // 设置播放速度
@@ -96,14 +106,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // 播放模式变更时保存
-  playMode.addEventListener('change', function() {
-    chrome.storage.sync.set({lastPlayMode: playMode.value});
+  // 播放模式切换
+  playModeToggle.addEventListener('click', function() {
+    isRandomMode = !isRandomMode;
+    updatePlayModeIcon(isRandomMode);
+    chrome.storage.sync.set({playMode: isRandomMode ? 'random' : 'sequential'});
   });
 
-  // 记住播放位置选项变更时保存
-  rememberPosition.addEventListener('change', function() {
-    chrome.storage.sync.set({rememberPosition: rememberPosition.checked});
+  // 自动播放选项变更时保存
+  autoplayCheckbox.addEventListener('change', function() {
+    chrome.storage.sync.set({autoplay: autoplayCheckbox.checked});
   });
 
   // 播放速度变更时保存
@@ -144,8 +156,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 action: 'startPlayingFrom',
                 folderId: folderId,
                 bookmarkId: bookmark.id,
-                playMode: playMode.value,
-                rememberPosition: rememberPosition.checked,
+                playMode: isRandomMode ? 'random' : 'sequential',
+                autoplay: autoplayCheckbox.checked,
                 playbackSpeed: parseFloat(playbackSpeed.value)
               });
             });
@@ -155,25 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-
-  // 开始播放
-  playButton.addEventListener('click', function() {
-    const selectedFolderId = folderSelect.value;
-    const selectedPlayMode = playMode.value;
-    if (selectedFolderId) {
-      // 保存选择的收藏夹
-      chrome.storage.sync.set({lastSelectedFolder: selectedFolderId});
-      chrome.runtime.sendMessage({
-        action: 'startPlaying',
-        folderId: selectedFolderId,
-        playMode: selectedPlayMode,
-        rememberPosition: rememberPosition.checked,
-        playbackSpeed: parseFloat(playbackSpeed.value)
-      });
-    } else {
-      alert('请选择一个收藏夹');
-    }
-  });
 
   // 停止播放按钮
   stopButton.addEventListener('click', function() {
@@ -198,7 +191,20 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.runtime.sendMessage({ action: 'pauseVideo' });
       isPlaying = false;
     } else {
-      chrome.runtime.sendMessage({ action: 'resumeVideo' });
+      // 如果没有当前播放的视频，从列表中选择第一个开始播放
+      if (!currentVideoId && videoList.children.length > 0) {
+        const firstVideo = videoList.children[0];
+        chrome.runtime.sendMessage({
+          action: 'startPlayingFrom',
+          folderId: folderSelect.value,
+          bookmarkId: firstVideo.dataset.id,
+          playMode: isRandomMode ? 'random' : 'sequential',
+          autoplay: autoplayCheckbox.checked,
+          playbackSpeed: parseFloat(playbackSpeed.value)
+        });
+      } else {
+        chrome.runtime.sendMessage({ action: 'resumeVideo' });
+      }
       isPlaying = true;
     }
     updatePlayPauseIcon(isPlaying);
