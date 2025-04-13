@@ -95,6 +95,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       currentVideoId: currentVideoId,
       isPlaying: isPlaying && !videoIsPaused
     });
+  } else if (request.action === 'getCurrentVideoURL') {
+    // 获取当前播放视频的URL
+    if (currentVideoId && currentPlaylist.length > 0) {
+      const video = currentPlaylist.find(item => item.id === currentVideoId);
+      if (video) {
+        sendResponse({ url: video.url });
+      } else {
+        sendResponse({ url: null });
+      }
+    } else {
+      sendResponse({ url: null });
+    }
   } else if (request.action === 'setPlaybackSpeed') {
     playbackSpeed = request.speed;
     // 如果当前正在播放视频，更新播放速度

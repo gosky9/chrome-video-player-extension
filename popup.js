@@ -267,14 +267,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 全屏按钮点击事件
   fullscreenButton.addEventListener('click', function() {
-    // 获取当前活动的视频标签页
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      if (tabs && tabs[0]) {
-        // 向当前标签页发送全屏请求
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleFullscreen' });
-        
-        // 关闭扩展弹出窗口
-        window.close();
+    // 获取当前视频标签页的URL
+    chrome.runtime.sendMessage({action: 'getCurrentVideo'}, function(response) {
+      if (response && response.currentVideoId) {
+        // 当前有视频播放，使用当前视频URL
+        chrome.runtime.sendMessage({action: 'getCurrentVideoURL'}, function(urlResponse) {
+          if (urlResponse && urlResponse.url) {
+            chrome.tabs.create({url: urlResponse.url}, function(tab) {
+              // 等待标签页加载完成后发送全屏命令
+              setTimeout(function() {
+                chrome.tabs.sendMessage(tab.id, {action: 'toggleFullscreen'});
+              }, 2000);
+            });
+          }
+        });
+      } else {
+        // 没有视频播放，提示用户
+        alert('请先播放一个视频再使用全屏功能');
       }
     });
   });
