@@ -13,6 +13,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     pauseVideo();
   } else if (request.action === 'resumeVideo') {
     resumeVideo();
+  } else if (request.action === 'toggleFullscreen') {
+    toggleFullscreen();
   }
 });
 
@@ -232,3 +234,67 @@ window.addEventListener('load', () => {
     checkIfReturnedFromRecommended();
   }
 });
+
+// 切换全屏模式
+function toggleFullscreen() {
+  if (window.location.hostname === 'www.youtube.com') {
+    toggleYouTubeFullscreen();
+  } else if (window.location.hostname === 'www.bilibili.com') {
+    toggleBilibiliFullscreen();
+  } else {
+    // 通用全屏方法
+    const video = document.querySelector('video');
+    if (video) {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen().catch(err => {
+          console.error(`全屏请求错误: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  }
+}
+
+// YouTube全屏切换
+function toggleYouTubeFullscreen() {
+  const fullscreenButton = document.querySelector('.ytp-fullscreen-button');
+  if (fullscreenButton) {
+    fullscreenButton.click();
+    console.log('切换YouTube全屏状态');
+  } else {
+    // 备用方法
+    const video = document.querySelector('video');
+    if (video) {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen().catch(err => {
+          console.error(`全屏请求错误: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  }
+}
+
+// B站全屏切换
+function toggleBilibiliFullscreen() {
+  const fullscreenButton = document.querySelector('.bpx-player-ctrl-full') || 
+                          document.querySelector('.bilibili-player-video-btn-fullscreen');
+  if (fullscreenButton) {
+    fullscreenButton.click();
+    console.log('切换B站全屏状态');
+  } else {
+    // 备用方法
+    const video = document.querySelector('video');
+    if (video) {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen().catch(err => {
+          console.error(`全屏请求错误: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  }
+}

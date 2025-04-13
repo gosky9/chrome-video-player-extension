@@ -267,6 +267,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 全屏按钮点击事件
   fullscreenButton.addEventListener('click', function() {
-    chrome.tabs.create({url: 'player.html'});
+    // 获取当前活动的视频标签页
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      if (tabs && tabs[0]) {
+        // 向当前标签页发送全屏请求
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleFullscreen' });
+        
+        // 关闭扩展弹出窗口
+        window.close();
+      }
+    });
   });
 });
