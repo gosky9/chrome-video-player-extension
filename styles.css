@@ -17,6 +17,11 @@
   padding: 0;
 }
 
+html, body {
+  height: 100vh; /* 设置高度为视口的100%，适应屏幕高度 */
+  max-height: 100vh;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #fff;
@@ -24,16 +29,21 @@ body {
   font-size: 14px;
   min-width: 760px;
   max-width: 800px;
+  overflow-y: hidden; /* 防止整个body出现滚动条 */
 }
 
 .container {
   padding: 20px;
+  height: 100%; /* 使容器填满整个body高度 */
+  display: flex;
+  flex-direction: column;
 }
 
 /* 标题样式 */
 .header {
   margin-bottom: 20px;
   text-align: center;
+  flex-shrink: 0; /* 防止标题被压缩 */
 }
 
 h1 {
@@ -51,6 +61,7 @@ h2 {
 /* 控制区域 */
 .controls {
   margin-bottom: 20px;
+  flex-shrink: 0; /* 防止控制区域被压缩 */
 }
 
 .control-group {
@@ -142,6 +153,7 @@ h2 {
 /* 进度条 */
 .progress-container {
   margin: 20px 0;
+  flex-shrink: 0; /* 防止进度条区域被压缩 */
 }
 
 #progressBar {
@@ -169,14 +181,19 @@ h2 {
 /* 视频列表 */
 .video-list-container {
   margin-top: 25px;
-  max-height: 500px;
+  flex: 1; /* 让视频列表自动填充剩余空间 */
   overflow-y: auto;
   border: 1px solid var(--border-color);
   border-radius: 4px;
+  min-height: 60vh; /* 视口高度的60%，保证有足够显示空间 */
+  display: flex;
+  flex-direction: column;
 }
 
 .video-list {
   list-style-type: none;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .video-list li {
@@ -205,6 +222,7 @@ h2 {
   margin-top: 20px;
   padding-top: 15px;
   border-top: 1px solid var(--border-color);
+  flex-shrink: 0; /* 防止设置区域被压缩 */
 }
 
 .checkbox-container {
