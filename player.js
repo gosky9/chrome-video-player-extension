@@ -14,11 +14,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextButton = document.getElementById('nextButton');
   const playPauseButton = document.getElementById('playPauseButton');
   const playIcon = document.getElementById('playIcon');
-  const fullscreenButton = document.getElementById('fullscreenButton');
+  const returnButton = document.getElementById('returnButton');
 
   let defaultFolderId = null;
   let currentVideoId = null;
   let isPlaying = false;
+
+  // 返回弹出窗口
+  returnButton.addEventListener('click', function() {
+    window.close();
+  });
 
   // 更新播放/暂停图标
   function updatePlayPauseIcon(playing) {
@@ -272,9 +277,4 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   requestAnimationFrame(animateProgress);
-
-  // 全屏按钮点击事件
-  fullscreenButton.addEventListener('click', function() {
-    chrome.tabs.create({url: 'player.html'});
-  });
-});
+}); 

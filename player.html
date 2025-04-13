@@ -3,14 +3,58 @@
 <head>  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Chrome 收藏夹视频播放器</title>
+  <title>Chrome 收藏夹视频播放器 - 全屏版</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    /* 全屏页面特定样式 */
+    html, body {
+      height: 100vh;
+      max-height: 100vh;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      min-width: unset;
+      max-width: unset;
+    }
+    
+    .fullscreen-container {
+      padding: 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .video-list-container {
+      min-height: calc(100vh - 300px);
+    }
+    
+    .control-group.fullscreen-buttons {
+      justify-content: flex-end;
+    }
+    
+    .return-btn {
+      background-color: var(--secondary-color);
+    }
+    
+    .return-btn:hover {
+      background-color: #2d9247;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="fullscreen-container">
     <div class="header">
-      <h1>Chrome 收藏夹视频播放器</h1>
+      <h1>Chrome 收藏夹视频播放器 - 全屏版</h1>
+    </div>
+    
+    <div class="control-group fullscreen-buttons">
+      <button id="returnButton" class="btn return-btn">返回弹出窗口</button>
     </div>
     
     <div class="controls">
@@ -42,10 +86,6 @@
       
       <div class="control-group">
         <button id="playButton" class="btn">开始播放列表</button>
-      </div>
-      
-      <div class="control-group">
-        <button id="fullscreenButton" class="btn fullscreen-btn">打开全屏播放器</button>
       </div>
       
       <div class="playback-controls">
@@ -82,6 +122,7 @@
       </label>
     </div>
   </div>
-  <script src="popup.js"></script>
+  
+  <script src="player.js"></script>
 </body>
-</html>
+</html> 
