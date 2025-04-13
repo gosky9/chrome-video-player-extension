@@ -9,49 +9,50 @@
 </head>
 <body>
   <div class="container">
-    <div class="controls">
-      <div class="control-group">
-        <select id="folderSelect" class="select-styled">
-          <option value="">选择收藏夹</option>
-        </select>
-        
-        <select id="playMode" class="select-styled">
-          <option value="random">随机播放</option>
-          <option value="sequential">顺序播放</option>
-        </select>
+    <!-- 顶部选择区域 -->
+    <div class="top-row">
+      <select id="folderSelect" class="select-styled">
+        <option value="">选择收藏夹</option>
+      </select>
+      
+      <select id="playMode" class="select-styled">
+        <option value="random">随机播放</option>
+        <option value="sequential">顺序播放</option>
+      </select>
+    </div>
+    
+    <!-- 播放控制区域 -->
+    <div class="control-row">
+      <div class="player-controls">
+        <button id="prevButton" class="control-btn" title="上一首">
+          <i class="bi bi-skip-backward-fill"></i>
+        </button>
+        <button id="playPauseButton" class="control-btn" title="播放/暂停">
+          <i class="bi bi-play-fill" id="playIcon"></i>
+        </button>
+        <button id="nextButton" class="control-btn" title="下一首">
+          <i class="bi bi-skip-forward-fill"></i>
+        </button>
+        <button id="stopButton" class="control-btn stop" title="停止播放">
+          <i class="bi bi-stop-fill"></i>
+        </button>
       </div>
       
-      <div class="control-row">
-        <div class="player-controls">
-          <button id="prevButton" class="control-btn" title="上一首">
-            <i class="bi bi-skip-backward-fill"></i>
-          </button>
-          <button id="playPauseButton" class="control-btn" title="播放/暂停">
-            <i class="bi bi-play-fill" id="playIcon"></i>
-          </button>
-          <button id="nextButton" class="control-btn" title="下一首">
-            <i class="bi bi-skip-forward-fill"></i>
-          </button>
-          <button id="stopButton" class="control-btn stop" title="停止播放">
-            <i class="bi bi-stop-fill"></i>
-          </button>
-        </div>
-        
-        <div class="buttons-group">
-          <button id="playButton" class="small-btn">开始播放</button>
-          <button id="fullscreenButton" class="small-btn fullscreen-btn">全屏播放器</button>
-          <select id="playbackSpeed" class="select-styled mini">
-            <option value="0.5">0.5x</option>
-            <option value="0.75">0.75x</option>
-            <option value="1" selected>1.0x</option>
-            <option value="1.25">1.25x</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2.0x</option>
-          </select>
-        </div>
+      <div class="right-controls">
+        <button id="playButton" class="action-btn">开始播放</button>
+        <button id="fullscreenButton" class="action-btn fullscreen-btn">全屏播放器</button>
+        <select id="playbackSpeed" class="select-styled compact">
+          <option value="0.5">0.5x</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1.0x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2.0x</option>
+        </select>
       </div>
     </div>
     
+    <!-- 进度条 -->
     <div class="progress-container">
       <div id="progressBar">
         <div id="progress"></div>
@@ -61,11 +62,13 @@
       </div>
     </div>
     
-    <div class="video-list-container">
-      <h2>播放列表</h2>
+    <!-- 播放列表 -->
+    <div class="playlist-section">
+      <div class="playlist-header">播放列表</div>
       <ul id="videoList" class="video-list"></ul>
     </div>
     
+    <!-- 设置 -->
     <div class="settings">
       <label class="checkbox-container">
         <input type="checkbox" id="rememberPosition" checked>
